@@ -1,0 +1,100 @@
+{
+  "name": "Automated Daily Dollar Rate Alert pipeline",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 8
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        -320,
+        0
+      ],
+      "id": "3d051fe4-9b56-4bc7-a8d8-117882e2fba2",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "url": "https://open.er-api.com/v6/latest/USD",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        -96,
+        0
+      ],
+      "id": "ea5f6217-2ba6-47a8-9f67-c0eb899c0067",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "chatId": "8845230921",
+        "text": "=💱 **Daily Global FX Rate Alert**\n\nGood morning, Odogwu! Here are the live exchange rates for today:\n\n🇺🇸 **USD / 🇳🇬 NGN {{ $json.rates.NGN.toFixed(2) }}\n🇬🇧 **GBP / 🇳🇬 NGN {{ ($json.rates.NGN / $json.rates.GBP).toFixed(2) }}\n🇪🇺 **EUR / 🇳🇬 NGN {{ ($json.rates.NGN / $json.rates.EUR).toFixed(2) }}\n🇨🇦 **CAD / 🇳🇬 NGN {{ ($json.rates.NGN / $json.rates.CAD).toFixed(2) }}\n🇰🇼 **KWD / 🇳🇬 NGN {{ ($json.rates.NGN / $json.rates.KWD).toFixed(2) }}\n\n*Powered by odogwu automation studio🚀*\n\n\n\n\n\n\n\n",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        128,
+        0
+      ],
+      "id": "d5532250-24f0-4f37-811f-794dfdcb6480",
+      "name": "Send a text message",
+      "webhookId": "1e3f45e8-3be8-447e-9ba0-f5678602ebe4",
+      "credentials": {
+        "telegramApi": {
+          "id": "Tyv9bmRlkcNx5YY2",
+          "name": "Dollar_Rate"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Send a text message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "146d0512-fe04-469e-9cd7-60ca1ee73409",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "13ff3582439a99c8dc80561afe729fccd8e5ecb467e032acc521d2dc3b6fc2df"
+  },
+  "nodeGroups": [],
+  "id": "oKnfRBTpinIgBgds",
+  "tags": []
+}
